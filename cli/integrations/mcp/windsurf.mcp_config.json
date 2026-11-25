@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ghostchars": {
+      "command": "npx",
+      "args": ["-y", "ghostchars", "mcp"]
+    }
+  }
+}

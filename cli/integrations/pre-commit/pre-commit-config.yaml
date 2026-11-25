@@ -1,0 +1,14 @@
+# Paste into .pre-commit-config.yaml. A local hook, so nothing is cloned: the
+# framework installs the pinned npm package into its own environment and runs
+# the gate over the staged files it is handed.
+repos:
+  - repo: local
+    hooks:
+      - id: ghostchars
+        name: ghostchars (text bar)
+        entry: ghostchars check --bar text --
+        language: node
+        additional_dependencies: ['ghostchars@1.1.0']
+        types: [text]
+        # `--fix` is deliberately absent. A hook that rewrites prose on commit
+        # flattens em dashes into hyphens without anyone reading the result.

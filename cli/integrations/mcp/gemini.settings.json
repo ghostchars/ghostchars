@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "ghostchars": {
+      "command": "npx",
+      "args": ["-y", "ghostchars", "mcp"],
+      "timeout": 30000,
+      "trust": false
+    }
+  }
+}

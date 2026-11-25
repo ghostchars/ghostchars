@@ -1,0 +1,111 @@
+# A composite GitHub Action that runs `ghostchars check` on a pull request or
+# a repository. The logic lives in scan.mjs beside this file; the steps below
+# only make sure Node is new enough, install the pinned CLI, run the scan and
+# upload the SARIF log.
+name: Ghostchars check
+description: >-
+  Find hidden Unicode characters and decoded hidden messages in the files a
+  pull request changed and in the rules your coding agents read. Offline.
+author: Ghostchars
+branding:
+  icon: eye
+  color: gray-dark
+
+inputs:
+  paths:
+    description: >-
+      Files or directories to scan, one per line. When empty, a pull request
+      scans the files it changed and any other run scans the whole repository.
+      The directories and rule files coding agents read are scanned either way.
+    required: false
+    default: ''
+  fail-on:
+    description: >-
+      What fails the job. payload: a decoded hidden message. hidden: a decoded
+      hidden message, a bidi control or a tag character. any: anything check
+      reports. never: report only.
+    required: false
+    default: hidden
+  sarif:
+    description: >-
+      Upload the findings to code scanning as SARIF. Needs the
+      security-events: write permission. Skipped for pull requests from forks.
+    required: false
+    default: 'true'
+  version:
+    description: The ghostchars npm version to run.
+    required: false
+    default: '1.1.0'
+
+outputs:
+  failed:
+    description: true when the job failed on findings or on an error.
+    value: ${{ steps.scan.outputs.failed }}
+  files-scanned:
+    description: How many files were scanned.
+    value: ${{ steps.scan.outputs.files-scanned }}
+  files-failing:
+    description: How many files have findings that reach the fail-on threshold.
+    value: ${{ steps.scan.outputs.files-failing }}
+  payloads:
+    description: How many hidden messages were decoded.
+    value: ${{ steps.scan.outputs.payloads }}
+  sarif-file:
+    description: Path of the SARIF log, empty when none was written.
+    value: ${{ steps.scan.outputs.sarif-file }}
+
+runs:
+  using: composite
+  steps:
+    - name: Check the Node version
+      id: node
+      shell: bash
+      run: |
+        major="$(node -p 'process.versions.node.split(".")[0]' 2>/dev/null || echo 0)"
+        if [ "$major" -ge 22 ] 2>/dev/null; then
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "ready=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Set up Node
+      if: steps.node.outputs.ready != 'true'
+      uses: actions/setup-node@v4
+      with:
+        node-version: '24'
+
+    - name: Install ghostchars
+      id: install
+      shell: bash
+      env:
+        GHOSTCHARS_VERSION: ${{ inputs.version }}
+      run: |
+        case "$GHOSTCHARS_VERSION" in
+          '' | *[!0-9A-Za-z.+-]*)
+            echo "ghostchars: version must be an npm version or tag" >&2
+            exit 2
+            ;;
+        esac
+        prefix="$RUNNER_TEMP/ghostchars-cli"
+        npm install --prefix "$prefix" --no-save --no-audit --no-fund --ignore-scripts \
+          "ghostchars@$GHOSTCHARS_VERSION"
+        echo "cli=$prefix/node_modules/ghostchars/dist/cli.js" >> "$GITHUB_OUTPUT"
+
+    - name: Scan
+      id: scan
+      shell: bash
+      env:
+        GHOSTCHARS_CLI: ${{ steps.install.outputs.cli }}
+        GHOSTCHARS_PATHS: ${{ inputs.paths }}
+        GHOSTCHARS_FAIL_ON: ${{ inputs.fail-on }}
+        GHOSTCHARS_SARIF: ${{ inputs.sarif }}
+      run: node "$GITHUB_ACTION_PATH/scan.mjs"
+
+    - name: Upload SARIF
+      # Runs after a failing scan too, so the findings reach code scanning. A
+      # pull request from a fork has a read-only token and cannot upload.
+      if: ${{ !cancelled() && steps.scan.outputs.sarif-file != '' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
+      uses: github/codeql-action/upload-sarif@v4
+      with:
+        sarif_file: ${{ steps.scan.outputs.sarif-file }}
+        category: ghostchars

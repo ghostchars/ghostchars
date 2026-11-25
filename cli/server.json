@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.ghostchars/ghostchars",
+  "title": "Ghostchars",
+  "description": "Find and remove invisible Unicode: zero-width, tag smuggling, bidi, homoglyphs. Offline.",
+  "repository": {
+    "url": "https://github.com/ghostchars/ghostchars",
+    "source": "github",
+    "subfolder": "cli"
+  },
+  "websiteUrl": "https://ghostchars.com/en/cli/",
+  "version": "1.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "ghostchars",
+      "version": "1.1.0",
+      "transport": { "type": "stdio" },
+      "packageArguments": [{ "type": "positional", "value": "mcp" }]
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+[mcp_servers.ghostchars]
+command = "npx"
+args = ["-y", "ghostchars", "mcp"]

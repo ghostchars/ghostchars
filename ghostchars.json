@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "surfaces": [
+    {
+      "id": "source",
+      "bar": "text",
+      "include": [
+        "cli/**",
+        "web/src/**",
+        "tools/**",
+        "*.py",
+        "README.md",
+        "PYTHON.md",
+        "*/README.md",
+        "*/*/README.md"
+      ],
+      "exclude": [
+        "**/__fixtures__/**",
+        "**/fixtures/**",
+        "**/golden.json",
+        "**/*.generated.*",
+        "web/src/engine/unicode-names.ts",
+        "tools/gen_golden.py",
+        "**/node_modules/**",
+        "**/dist/**",
+        "**/out/**",
+        "**/.venv/**"
+      ],
+      "pins": {
+        "strip_invisible.py": 3,
+        "style_report.py": 9,
+        "web/src/engine/__tests__/html.test.ts": 8,
+        "web/src/engine/__tests__/zip.test.ts": 5,
+        "web/src/engine/clean.ts": 1,
+        "web/src/engine/html.ts": 1,
+        "web/src/engine/index.ts": 3,
+        "web/src/engine/style.ts": 11,
+        "web/src/engine/tables.ts": 2
+      }
+    }
+  ]
+}

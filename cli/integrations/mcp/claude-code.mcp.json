@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "ghostchars": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "ghostchars", "mcp"]
+    }
+  }
+}

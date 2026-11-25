@@ -1,0 +1,25 @@
+# Copy to .github/workflows/ghostchars.yml.
+#
+# On a pull request the Action scans the files the pull request changed plus
+# every rules file and skill your coding agents read. On a push it scans the
+# whole repository. Replace @main with a full commit SHA to pin the Action.
+name: ghostchars
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  # Lets the Action upload its SARIF log to code scanning.
+  security-events: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ghostchars/ghostchars/cli/integrations/github-action@main
+        with:
+          fail-on: hidden

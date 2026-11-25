@@ -1,0 +1,78 @@
+{
+  "name": "ghostchars",
+  "version": "1.1.0",
+  "description": "Find and remove invisible Unicode characters and machine-writing punctuation from text and documents. Offline, no telemetry.",
+  "mcpName": "io.github.ghostchars/ghostchars",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://ghostchars.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghostchars/ghostchars.git",
+    "directory": "cli"
+  },
+  "bugs": {
+    "url": "https://github.com/ghostchars/ghostchars/issues"
+  },
+  "keywords": [
+    "unicode",
+    "zero-width",
+    "invisible-characters",
+    "homoglyph",
+    "bidi",
+    "text-hygiene",
+    "mcp-server",
+    "cli"
+  ],
+  "packageManager": "pnpm@10.30.3",
+  "engines": {
+    "node": ">=22"
+  },
+  "bin": {
+    "ghostchars": "./dist/cli.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "integrations",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist tsconfig.tsbuildinfo coverage *.tgz",
+    "prepack": "node ./scripts/build.mjs",
+    "prepublishOnly": "node ./scripts/prepublish-check.mjs"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "@types/node": "24.10.1",
+    "esbuild": "0.28.2",
+    "eslint": "9.39.3",
+    "globals": "17.7.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.67.0",
+    "vitest": "3.2.4",
+    "zod": "4.4.3"
+  }
+}

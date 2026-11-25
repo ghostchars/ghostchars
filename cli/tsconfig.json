@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "allowJs": false,
+    "skipLibCheck": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "forceConsistentCasingInFileNames": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+
+    "noEmit": true,
+
+    "paths": {
+      "@ghostchars/engine": ["../web/src/engine/index.ts"],
+      "@ghostchars/engine/style": ["../web/src/engine/style.ts"],
+      "@ghostchars/engine/docx": ["../web/src/engine/docx.ts"],
+      "@ghostchars/engine/odt": ["../web/src/engine/odt.ts"],
+      "@ghostchars/engine/html": ["../web/src/engine/html.ts"],
+      "@ghostchars/engine/zip": ["../web/src/engine/zip.ts"],
+      "@/engine": ["../web/src/engine/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts", "*.ts"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,8 @@
+# The CLI is a standalone pnpm package (no root workspace), so it carries its
+# own ignore list. `pnpm-lock.yaml` IS committed: reproducible installs.
+# Everything below is written by a build, an install, or a local `npm pack`.
+node_modules/
+dist/
+tsconfig.tsbuildinfo
+coverage/
+*.tgz
